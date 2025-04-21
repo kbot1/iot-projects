@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Données DHT11</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Données du capteur DHT11</h1>
+  <canvas id="chart" width="600" height="300"></canvas>
+
+  <script>
+    async function fetchData() {
+      const response = await fetch('data.json', { cache: "no-store" });
+      return await response.json();
+    }
+
+    const ctx = document.getElementById('chart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [], // timestamps
+        datasets: [
+          {
+            label: 'Température (°C)',
+            borderColor: 'red',
+            data: [],
+            yAxisID: 'y1'
+          },
+          {
+            label: 'Humidité (%)',
+            borderColor: 'blue',
+            data: [],
+            yAxisID: 'y2'
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y1: {
+            position: 'left',
+            beginAtZero: true,
+            title: { display: true, text: 'Température (°C)' }
+          },
+          y2: {
+            position: 'right',
+            beginAtZero: true,
+            title: { display: true, text: 'Humidité (%)' },
+            grid: { drawOnChartArea: false }
+          }
+        }
+      }
+    });
+
+    async function updateChart() {
+      const data = await fetchData();
+
+      const time = new Date(data.timestamp).toLocaleTimeString();
+      chart.data.labels.push(time);
+      chart.data.datasets[0].data.push(data.temperature);
+      chart.data.datasets[1].data.push(data.humidity);
+
+      // Limite à 20 points
+      if (chart.data.labels.length > 20) {
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
+        chart.data.datasets[1].data.shift();
+      }
+
+      chart.update();
+    }
+
+    setInterval(updateChart, 5000);
+  </script>
+</body>
+</html>
