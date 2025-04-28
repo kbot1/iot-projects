@@ -1,10 +1,5 @@
 [
   {
-    "timestamp": "2025-04-28T22:31:44.840787",
-    "temperature": 24.5,
-    "humidity": 54.0
-  },
-  {
     "timestamp": "2025-04-28T22:31:52.465560",
     "temperature": 24.5,
     "humidity": 54.0
@@ -246,6 +241,11 @@
   },
   {
     "timestamp": "2025-04-28T22:37:55.476777",
+    "temperature": 24.8,
+    "humidity": 52.0
+  },
+  {
+    "timestamp": "2025-04-28T22:38:02.862193",
     "temperature": 24.8,
     "humidity": 52.0
   }
